@@ -17,7 +17,7 @@ valid_sample_rate = {100, 500}
 
 
 def module_logging_level():
-    return logging.WARNING
+    return logging.CRITICAL
 
 
 def logger_name():

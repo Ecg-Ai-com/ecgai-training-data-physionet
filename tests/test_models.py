@@ -16,7 +16,7 @@ from src.ecgai_training_data_physionet.models import (
 
 
 def module_logging_level():
-    return logging.WARNING
+    return logging.ERROR
 
 
 def logger_name():
