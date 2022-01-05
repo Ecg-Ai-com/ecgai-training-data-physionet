@@ -24,7 +24,8 @@ def logger_name():
 
 
 def setup_test_record_data():
-    path = os.path.join( "tests", "test_data", "00001_hr.json")
+    from definitions import ROOT_DIR
+    path = os.path.join(ROOT_DIR, "tests", "test_data", "00001_hr.json")
     with open(path) as json_file:
         data = json.load(json_file)
     record = EcgRecord.from_json(data)
