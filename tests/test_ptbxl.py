@@ -7,10 +7,10 @@ import os
 import pytest
 from fluentcheck import Is
 
-from src.ecgai_training_data_physionet import physionet
-from src.ecgai_training_data_physionet.models import EcgRecord, DiagnosticCode
-from src.ecgai_training_data_physionet.physionet import InValidRecordException
-from src.ecgai_training_data_physionet.ptbxl import PtbXl, MetaDataRow
+from ecgai_training_data_physionet import physionet
+from ecgai_training_data_physionet.models import EcgRecord, DiagnosticCode
+from ecgai_training_data_physionet.physionet import InValidRecordException
+from ecgai_training_data_physionet.ptbxl import PtbXl, MetaDataRow
 
 invalid_sample_rate = {0, -1, 55, 3256}
 valid_sample_rate = {100, 500}
@@ -32,7 +32,9 @@ def test_fixture(tmp_path):
 
 @pytest.mark.parametrize("sample_rate", invalid_sample_rate)
 @pytest.mark.asyncio
-async def test_get_records_list_invalid_sample_rate_raise_exception(sample_rate: int, caplog):
+async def test_get_records_list_invalid_sample_rate_raise_exception(
+    sample_rate: int, caplog
+):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
         with pytest.raises(ValueError):
@@ -73,9 +75,7 @@ valid_record_path_name = {
     "records100/21000/21837_lr",
 }
 
-valid_record_id = {
-    1, 2, 6, 45,100, 343, 1029, 7678, 21345, 8765, 4567, 9876
-}
+valid_record_id = {1, 2, 6, 45, 100, 343, 1029, 7678, 21345, 8765, 4567, 9876}
 
 
 @pytest.fixture(scope="session")
@@ -97,13 +97,17 @@ def data_directory(tmpdir_factory):
 
 @pytest.mark.parametrize("record_id", valid_record_id)
 @pytest.mark.asyncio
-async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_id, caplog, data_directory):
+async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(
+    record_id, caplog, data_directory
+):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         # Arrange
         print(data_directory)
         sut = PtbXl(data_location=data_directory)
         # Act
-        record_task = asyncio.create_task(sut.get_record(record_id=record_id, sample_rate=100))
+        record_task = asyncio.create_task(
+            sut.get_record(record_id=record_id, sample_rate=100)
+        )
         result = await record_task
         # Assert
         Is(result).of_type(EcgRecord)
@@ -118,7 +122,9 @@ async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_
 
 @pytest.mark.parametrize("record_id", valid_record_id)
 @pytest.mark.asyncio
-async def test_get_record_with_valid_record_id_and_valid_500_sample_rate(record_id, caplog, data_directory):
+async def test_get_record_with_valid_record_id_and_valid_500_sample_rate(
+    record_id, caplog, data_directory
+):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         # Arrange
         print(data_directory)
@@ -152,7 +158,9 @@ valid_record_path_name_to_json = {
 
 @pytest.mark.parametrize("record_id", valid_record_id)
 @pytest.mark.asyncio
-async def test_get_record_with_valid_path_write_to_json(record_id, caplog, data_directory):
+async def test_get_record_with_valid_path_write_to_json(
+    record_id, caplog, data_directory
+):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl(data_location=data_directory)
         # record_task = asyncio.create_task(sut.get_record(record_path_name=record_path_name))
@@ -213,9 +221,7 @@ invalid_record_path_name = {
     "records100/21000/218327_lr",
 }
 
-invalid_record_id = {
-    23423423, 35634534, 234234, 123123, 3643634
-}
+invalid_record_id = {23423423, 35634534, 234234, 123123, 3643634}
 
 
 @pytest.mark.parametrize("record_id", invalid_record_id)
@@ -245,6 +251,12 @@ def test_get_database_metadata(caplog):
 def test_get_scp_code(caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
-        codes = sut.get_scp_code_description('NDT')
+        codes = sut.get_scp_code_description("NDT")
         Is(codes).of_type(DiagnosticCode)
-        assert codes.description == 'non-diagnostic T abnormalities'
+        assert codes.description == "non-diagnostic T abnormalities"
+
+
+def test_metadata_is_loaded_true(caplog, data_directory):
+    with caplog.at_level(level=module_logging_level(), logger=logger_name()):
+        sut = PtbXl(data_location=data_directory)
+        assert sut.is_loaded() is True

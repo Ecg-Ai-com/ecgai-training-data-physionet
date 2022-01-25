@@ -6,7 +6,7 @@ from ecgai_logging.log_decorator import log
 from numpy.distutils.fcompiler import none
 from wfdb import Record
 
-from src.ecgai_training_data_physionet.models import EcgRecord, EcgLeadRecord
+from ecgai_training_data_physionet.models import EcgRecord, EcgLeadRecord
 
 
 def module_name():
@@ -22,6 +22,12 @@ class IPhysioNetDataSet(ABC):
         Download and setup all required files
         """
         NotImplementedError()
+
+    @abstractmethod
+    def is_loaded(self) -> bool:
+        """
+
+        """
 
     # noinspection PyTypeChecker
     @abstractmethod
@@ -82,6 +88,9 @@ class IPhysioNetDataSet(ABC):
 
 
 class PhysioNetDataSet(IPhysioNetDataSet):
+    def is_loaded(self) -> bool:
+        pass
+
     def load(self):
         pass
 

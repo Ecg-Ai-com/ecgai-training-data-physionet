@@ -10,12 +10,8 @@ import wfdb
 from ecgai_logging.log_decorator import log
 from wfdb import Record
 
-from src.ecgai_training_data_physionet.models import EcgRecord, DiagnosticCode
-from src.ecgai_training_data_physionet.physionet import (
-    PhysioNetDataSet,
-    InValidRecordException,
-    FileNotDownloadedException,
-)
+from ecgai_training_data_physionet.models import EcgRecord, DiagnosticCode
+from ecgai_training_data_physionet.physionet import PhysioNetDataSet, InValidRecordException, FileNotDownloadedException
 
 
 class MetaDataRow:
@@ -64,6 +60,13 @@ class PtbXl(PhysioNetDataSet):
             self.download_database_metadata()
         if not os.path.isfile(self.get_scp_codes_file_path()):
             self.download_scp_codes()
+
+    @log
+    def is_loaded(self) -> bool:
+        return bool(
+            os.path.isfile(self.get_database_metadata_file_path())
+            & os.path.isfile(self.get_scp_codes_file_path())
+        )
 
     @log
     def __init__(

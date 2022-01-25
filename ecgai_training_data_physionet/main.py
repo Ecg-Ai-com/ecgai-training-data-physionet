@@ -1,8 +1,8 @@
 import asyncio
 from typing import Any, Awaitable
 
-from src.ecgai_training_data_physionet.models import EcgRecord
-from src.ecgai_training_data_physionet.ptbxl import PtbXl
+from ecgai_training_data_physionet.models import EcgRecord
+from ecgai_training_data_physionet.ptbxl import PtbXl
 
 
 async def run_sequence(*functions: Awaitable[Any]) -> None:
@@ -15,9 +15,9 @@ async def run_parallel(*functions: Awaitable[Any]) -> None:
 
 
 async def main():
-    lst = list(range(1,100))
+    lst = list(range(1, 100))
     record_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    tasks = [get_record('data',i) for i in lst]
+    tasks = [get_record("data", i) for i in lst]
     await run_parallel(*tasks)
 
 
@@ -32,6 +32,7 @@ async def get_records_list() -> list[str]:
 
 
 # noinspection PyTypeChecker
+
 
 async def get_record(record_path_name: str, record_id: int) -> EcgRecord:
     sut = PtbXl(data_location=record_path_name)
