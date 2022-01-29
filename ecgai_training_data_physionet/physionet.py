@@ -25,9 +25,7 @@ class IPhysioNetDataSet(ABC):
 
     @abstractmethod
     def is_loaded(self) -> bool:
-        """
-
-        """
+        """ """
 
     # noinspection PyTypeChecker
     @abstractmethod
