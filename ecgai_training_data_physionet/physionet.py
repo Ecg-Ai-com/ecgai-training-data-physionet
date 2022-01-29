@@ -154,11 +154,11 @@ class PhysioNetDataSet(IPhysioNetDataSet):
 class InValidRecordException(Exception):
     @log
     def __init__(self, record_id: int = none, data_base_name: str = none):
-        message = "The record was not found"
+        message = f"The record was not found"
         if record_id is not none:
-            message += "record name and path %s" % record_id
+            message += f" record_id {record_id}"
         if data_base_name is not none:
-            message += "from %s" % data_base_name
+            message += f" from {data_base_name}"
         super(InValidRecordException, self).__init__(message)
 
 
